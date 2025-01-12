@@ -1,4 +1,5 @@
 import './App.css';
+
 import LandingPage from './Pages/LandingPage';
 import Login from './Pages/Login';
 import Signup from './Pages/Signup';
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/signup" element={<Signup/>} />
+     
         {/* Add more routes here as needed */}
       </Routes>
     </Router>
