@@ -23,9 +23,10 @@ const registerUser = async (req, res) => {
 
     // Save the user to the database
     await user.save();
+    const token = await user.generateToken();
 
     // Send success response
-    res.status(201).json({ message: 'User registered successfully', user });
+    res.status(201).json({ message: 'User registered successfully', user ,token,myUserid:user._id.toString()});
   } catch (err) {
     console.error('Error during registration:', err);
     res.status(500).json({ error: 'Failed to register user. Please try again later.' });
