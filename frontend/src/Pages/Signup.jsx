@@ -3,23 +3,20 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 const Signup = () => {
   const [profilePic, setProfilePic] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [Firstname, setFirstname] = useState('');
-  const [Lastname, setLastname] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
-  const [cloudurl, setCloudurl] = useState('');
-  const mycloudname = process.env.REACT_APP_CLOUD_NAME;
-
-
+  const [cloudUrl, setCloudUrl] = useState('');
+  const myCloudName = process.env.REACT_APP_CLOUD_NAME;
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];// get from list of mutiple images gets the first image
-    if (file) { // proceed only if the file is present
+    const file = e.target.files[0];
+    if (file) {
       setProfilePic(file);
       const reader = new FileReader();
       reader.onload = () => setPreview(reader.result);
@@ -27,134 +24,133 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    const uniquePublicId = `${firstName}-${Date.now()}`;
 
-    //after click submit we will do 
-    //1)
-    e.preventDefault();
-    if (!profilePic) {
-      toast.error('Please upload a profile picture!');
-      return;
-    }
-    // 2)
-    const formData = new FormData()
-    const uniquePublicId = `${Firstname}-${Date.now()}`;
+    formData.append('file', file);
+    formData.append('upload_preset', 'user_profile_preset');
+    formData.append('public_id', uniquePublicId);
 
-    formData.append('file', profilePic)// key pair values
-    formData.append('upload_preset', 'user_profile_preset') // the seconf is a string
-    formData.append('public_id', uniquePublicId)// giving a proper name to image in cloudinary 
-
-    //hitting the cloudinary end point ang giving it formdata that has file amd my preset
     try {
-      console.log("i reached the axios post part")
-      const res = await axios.post(`https://api.cloudinary.com/v1_1/${mycloudname}/image/upload`, formData)
-      console.log("axios post")
-      console.log("what i recieved=", res.data)
-      const cloudinaryurl = res.data.secure_url;
-      setCloudurl(cloudinaryurl)
-
-      const UserData = {
-        name: `${Firstname} ${Lastname}`,
-        password: password,
-        email: email,
-        phone_no: phone,
-        profilepic: cloudinaryurl // directlt given from response from cloudinary 
-
-      }
-           try {
-        const response = await axios.post("http://localhost:3001/api/users/register", UserData)
-        console.log("the data has been sent to backend")
-        toast.success('user regsitered')
-        console.log(response.data)
-          }
-             catch (error) {
-        console.error("Error uploading the image:", error);
-        alert('Error uploading profile picture. Please try again.');
-        }
+      const res = await axios.post(`https://api.cloudinary.com/v1_1/${myCloudName}/image/upload`, formData);
+      return res.data.secure_url;
+    } catch (error) {
+      console.error('Error uploading image to Cloudinary:', error);
+      throw new Error('Image upload failed.');
     }
-    catch {
-      console.log()
-    }
-
-
   };
 
-  return (
-    // here notice the min-h-screen class the dyanamic adding of bg colour
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#FFE4C4]">
-     
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-      <div className="text-center mb-4">
+    // Validation
+    if (!firstName || !lastName || !email || !password || !phone || !profilePic) {
+      toast.error('All fields are required!');
+      return;
+    }
+
+    try {
+      // Upload profile picture to Cloudinary
+      toast.info('Uploading profile picture...');
+      const uploadedImageUrl = await uploadToCloudinary(profilePic);
+      setCloudUrl(uploadedImageUrl);
+
+      // Prepare user data
+      const userData = {
+        name: `${firstName} ${lastName}`,
+        password,
+        email,
+        phone_no: phone,
+        profilepic: uploadedImageUrl,
+      };
+
+      // Send user data to backend
+      const res = await axios.post('http://localhost:3001/api/users/register', userData);
+      toast.success('User registered successfully!');
+      console.log('Backend response:', res.data);
+    } catch (error) {
+      console.error('Error during registration:', error);
+      toast.error('Registration failed. Please try again.');
+      if (error.response) {
+        const { status } = error.response;
+
+        if (status === 409) {
+          // Custom toast for user already exists
+          toast.error('The user already exists. Please try logging in.');
+        }
+      }
+    };
+  }
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#FFE4C4]">
       <ToastContainer />
-        <h3 className="text-4xl font-bold mb-4">Sign up here</h3>
+      <div className="text-center mb-4">
+        <h3 className="text-4xl font-bold mb-4">Sign Up Here</h3>
       </div>
       <div className="bg-[#FFCC99] p-8 rounded-lg shadow-lg w-full max-w-md">
-        <div className="fields mb-4">
-          <p className="text-center text-red-700">Choose your profile picture</p>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="block w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-
-          {preview && (
-            <div className="mb-4 ">
-              <p className="text-center font-semibold mb-2">Image Preview:</p>
-              <img
-                src={preview}
-                alt="Profile Preview"
-                className="w-36 h-36 rounded-full mx-auto object-cover border-2 border-[#A52A2A]"
-              />
-            </div>
-          )}
-          <input
-            type="text"
-            placeholder="Enter first name"
-            onChange={(e) => { setFirstname(e.target.value) }}
-            className="block w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-          <input
-            type="text"
-            placeholder="Enter last name"
-            onChange={(e) => { setLastname(e.target.value) }}
-            className="block w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-          <input
-            type="password"
-            placeholder="Enter Password"
-            onChange={(e) => { setPassword(e.target.value) }}
-            className="block w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-          <input
-            type="text"
-            placeholder="Enter Email"
-            onChange={(e) => { setEmail(e.target.value) }}
-            className="block w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-          <input
-            type="text"
-            placeholder="Enter phone number"
-            onChange={(e) => { setPhone(e.target.value) }}
-            className="block w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-
-
-        </div>
-        <div className="mysubmit">
-          <button
-            onClick={handleSubmit}
-            className="w-full p-3 bg-[#A52A2A] text-white rounded-[30px] hover:bg-[#800000] hover:translate-y-[-2px] transition"
-          >
-            Submit
-          </button>
-
-
-        </div>
+        <p className="text-center text-red-700">Choose your profile picture</p>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="block w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
+        {preview && (
+          <div className="mb-4">
+            <p className="text-center font-semibold mb-2">Image Preview:</p>
+            <img
+              src={preview}
+              alt="Profile Preview"
+              className="w-36 h-36 rounded-full mx-auto object-cover border-2 border-[#A52A2A]"
+            />
+          </div>
+        )}
+        <input
+          type="text"
+          placeholder="Enter First Name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          className="block w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
+        <input
+          type="text"
+          placeholder="Enter Last Name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          className="block w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
+        <input
+          type="email"
+          placeholder="Enter Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="block w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
+        <input
+          type="password"
+          placeholder="Enter Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="block w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
+        <input
+          type="text"
+          placeholder="Enter Phone Number"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          className="block w-full p-3 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
+        <button
+          onClick={handleSubmit}
+          className="w-full p-3 bg-[#A52A2A] text-white rounded-[30px] hover:bg-[#800000] hover:translate-y-[-2px] transition"
+        >
+          Submit
+        </button>
       </div>
     </div>
   );
-}
-
+};
 
 export default Signup;
