@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useDispatch } from 'react-redux';
+import { Usersetup } from '../Features/Login/Loginslice';
 const Login = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -25,6 +27,7 @@ const Login = () => {
         email,
         password,
       });
+      console.log("API Res from backend full ", response.data);  // Log the response to inspect the fields
 
       if (response.status === 200) {
         toast.success('Redirecting to Dashboard...', {
@@ -36,13 +39,22 @@ const Login = () => {
           closeOnClick: true,
         });
 
+        const loggedinuser={
+          username: response.data.username,
+        profilePic: response.data.profilePic,
+        token: response.data.token,
+        userId: response.data.myUserid,
+        }
+      
+        dispatch(Usersetup(loggedinuser));// usersetup is a function or rather a action of redux where we are passing the loggedinuser a object as parameter
+
         // Save token and userId in localStorage
         localStorage.setItem('authToken', response.data.token);
         localStorage.setItem('userId', response.data.myUserid);
 
         // Redirect to Dashboard after a slight delay
         setTimeout(() => {
-          navigate('/dashboard');
+          navigate('/');
         }, 2000);
       }
     } catch (error) {

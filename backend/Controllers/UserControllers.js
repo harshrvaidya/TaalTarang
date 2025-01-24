@@ -58,7 +58,9 @@ if (user){
   res.status(200).json({
     message:"login successful",
     token:await userexist.generateToken(),
-     myUserid: userexist._id.toString() 
+     myUserid: userexist._id.toString(),
+     username: userexist.name, // i am also sending the username and profile pic needed for the landing page
+     profilePic: userexist.profilepic 
   })
 }
 else{
