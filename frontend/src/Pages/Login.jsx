@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import { Usersetup } from '../Features/Login/Loginslice';
+
 const Login = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
@@ -39,14 +40,14 @@ const Login = () => {
           closeOnClick: true,
         });
 
-        const loggedinuser={
+        const loggedinuser = {
           username: response.data.username,
-        profilePic: response.data.profilePic,
-        token: response.data.token,
-        userId: response.data.myUserid,
-        }
-      
-        dispatch(Usersetup(loggedinuser));// usersetup is a function or rather a action of redux where we are passing the loggedinuser a object as parameter
+          profilePic: response.data.profilePic,
+          token: response.data.token,
+          userId: response.data.myUserid,
+        };
+
+        dispatch(Usersetup(loggedinuser)); // Update the Redux store with the logged-in user
 
         // Save token and userId in localStorage
         localStorage.setItem('authToken', response.data.token);
@@ -54,7 +55,7 @@ const Login = () => {
 
         // Redirect to Dashboard after a slight delay
         setTimeout(() => {
-          navigate('/');
+          navigate('/dashboard');
         }, 2000);
       }
     } catch (error) {

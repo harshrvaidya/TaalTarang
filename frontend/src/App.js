@@ -1,4 +1,7 @@
 import './App.css';
+import AddShops from './Pages/AddShops';
+import Dashboard from './Pages/Dashboard';
+
 
 import LandingPage from './Pages/LandingPage';
 import Login from './Pages/Login';
@@ -12,7 +15,8 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/signup" element={<Signup/>} />
-     
+        <Route path="/dashboard" element={<Dashboard/>} />
+        <Route path="/addshops" element={<AddShops/>} />
         {/* Add more routes here as needed */}
       </Routes>
     </Router>
