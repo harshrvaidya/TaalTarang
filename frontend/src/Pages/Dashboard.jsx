@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
-import Sidebar from '../Components/Sidebar';
-import './Dashboard.css'; // Import the CSS file
+import Sidebar from '../Components/Sidebar'; // Ensure this path is correct
 
 const Dashboard = () => {
   const [shops, setShops] = useState([]);
@@ -36,10 +35,7 @@ const Dashboard = () => {
         <h2 className="text-2xl font-semibold mb-4">Added Shops</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
           {shops.map((shop) => (
-            <div
-              key={shop._id}
-              className="bg-white border border-[#A52A2A] p-6 rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105"
-            >
+            <div key={shop._id} className="bg-white border border-[#A52A2A] p-6 rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105">
               {shop.shopImage && <img src={shop.shopImage} alt={shop.shopname} className="w-full h-48 rounded-t-lg object-cover mb-4" />}
               <div className="p-4">
                 <h3 className="text-xl font-bold mb-2 text-[#A52A2A]">{shop.shopname}</h3>
