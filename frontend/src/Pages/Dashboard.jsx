@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
-import Sidebar from '../Components/Sidebar'; // Ensure this path is correct
+import Sidebar from '../Components/Sidebar';
+
 
 const Dashboard = () => {
   const [shops, setShops] = useState([]);
@@ -25,6 +26,16 @@ const Dashboard = () => {
     fetchShops();
   }, [location.state?.refresh]); // Re-fetch shops when navigated to with refresh state
 
+
+  const handledelete = async (id) => {
+axios.delete(`http://localhost:3001/api/shops/deleteshop/${id}`)
+.then((response)=>{console.log(response.data)
+  window.location.reload()
+})
+  .catch((error)=>{console.log(error)})
+
+  }
+
   return (
     <div className="flex">
       <Sidebar />
@@ -35,13 +46,18 @@ const Dashboard = () => {
         <h2 className="text-2xl font-semibold mb-4">Added Shops</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
           {shops.map((shop) => (
-            <div key={shop._id} className="bg-white border border-[#A52A2A] p-6 rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105">
+            <div
+              key={shop._id}
+              className="bg-white border border-[#A52A2A] p-6 rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105"
+            >
               {shop.shopImage && <img src={shop.shopImage} alt={shop.shopname} className="w-full h-48 rounded-t-lg object-cover mb-4" />}
               <div className="p-4">
                 <h3 className="text-xl font-bold mb-2 text-[#A52A2A]">{shop.shopname}</h3>
                 <p className="mb-2 text-gray-700">Location: {shop.shopAddress}</p>
                 <p className="mb-2 text-gray-700">Contact: {shop.shopContact}</p>
                 <p className="text-gray-700">Added by: {shop.addedBy && shop.addedBy.name ? shop.addedBy.name : 'Unknown'}</p> {/* Check if addedBy exists and has a name */}
+             <Link to={`/updateShop/${shop._id}`}>update Shop </Link>
+             <button onClick={(e)=>handledelete(shop._id)}>delete</button>
               </div>
             </div>
           ))}
