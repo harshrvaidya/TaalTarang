@@ -1,0 +1,67 @@
+{"products": [
+  {
+    "id": 1,
+    "title": "Tabla Gathi",
+    "description": "Tabla gathis used to adjust tabla sound.",
+    "price": 549,
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrRWw_SGcnSq0w_y13lOH_dFMjy42RUXEwLg&s",
+    "quantity": 1
+  },
+  {
+    "id": 2,
+    "title": "Tabla Gaddi (Soft Cushion)",
+    "description": "A soft padded cushion to place the tabla for stability and comfort.",
+    "price": 299,
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKUEiZJ_DOs-23gLYwyAtiPixS3D1PYJJZyw&s",
+    "quantity": 1
+  },
+  {
+    "id": 3,
+    "title": "Tabla Cover",
+    "description": "A protective tabla cover to safeguard from dust and damage.",
+    "price": 399,
+    "thumbnail": "https://m.media-amazon.com/images/I/21pNkJ0ixrL._AC_UF1000,1000_QL80_.jpg",
+    "quantity": 1
+  },
+  {
+    "id": 4,
+    "title": "Tabla Hammer",
+    "description": "A tuning hammer used to adjust tabla tension and sound.",
+    "price": 249,
+    "thumbnail": "https://m.media-amazon.com/images/I/61t6gghr96L.jpg",
+    "quantity": 1
+  },
+  {
+    "id": 5,
+    "title": "Tabla Bindi (Syahi)",
+    "description": "High-quality syahi for repairing tabla drum heads.",
+    "price": 199,
+    "thumbnail": "https://example.com/tabla-bindi.jpg",
+    "quantity": 1
+  },
+  {
+    "id": 6,
+    "title": "Tabla Pudi (Drum Head)",
+    "description": "Premium quality tabla pudi (drum skin) for replacement.",
+    "price": 899,
+    "thumbnail": "https://m.media-amazon.com/images/I/41K2jQCHFmL._AC_UF1000,1000_QL80_.jpg",
+    "quantity": 1
+  },
+  {
+    "id": 7,
+    "title": "Tabla Bag",
+    "description": "A durable, padded carrying bag for easy transport of tabla.",
+    "price": 1299,
+    "thumbnail": "https://m.media-amazon.com/images/I/61GRfQrkprL.jpg",
+    "quantity": 1
+  },
+  {
+    "id": 8,
+    "title": "Tabla Bayan Ring",
+    "description": "A sturdy ring stand to keep the tabla bayan stable while playing.",
+    "price": 349,
+    "thumbnail": "https://m.media-amazon.com/images/I/61AIJHcCo2L._AC_UF1000,1000_QL80_.jpg",
+    "quantity": 1
+  }
+]
+}

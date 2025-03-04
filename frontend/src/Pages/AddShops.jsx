@@ -4,6 +4,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const AddShops = () => {
+  const token1 = localStorage.getItem('authToken');
   const [shopName, setShopName] = useState('');
   const [shopLocation, setShopLocation] = useState('');
   const [shopContact, setShopContact] = useState('');
@@ -85,6 +86,8 @@ const AddShops = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#FFE4C4]">
       <h1 className="text-4xl font-bold mb-4">Add Shops</h1>
       <h2 className="text-xl mb-4">You are logged in as {user}</h2>
+      <h2 className="text-xl mb-4">token is  {token1}</h2>
+
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="shopName">

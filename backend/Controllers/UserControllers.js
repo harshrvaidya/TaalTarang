@@ -79,4 +79,38 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, login };
+const getuserbyID = async (req, res) => {
+  try {
+    console.log(`Fetching user  with ID: ${req.params.id}`);
+    const myUser  = await User.findById(req.params.id);
+        console.log('Fetched User for profile:', myUser);
+    res.json(myUser);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({ error: 'Failed to fetch user' });
+  }
+};
+
+const updateUserProfile = async (req, res) => {
+  const { name, phone_no, profilepic } = req.body;
+
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    user.name = name || user.name;
+    user.phone_no = phone_no || user.phone_no;
+    user.profilepic = profilepic || user.profilepic;
+
+    const updatedUser = await user.save();
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('Error updating profile: from backend ', error);
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+};
+
+module.exports = { registerUser, login ,updateUserProfile,getuserbyID };

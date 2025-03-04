@@ -4,9 +4,11 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const userRoutes = require('./Routes/UserRoutes'); // Ensure correct path
 const shopRoutes = require('./Routes/Shop'); // Ensure correct path
+const MarketplaceRoutes = require('./Routes/MarketplaceRoutes'); // Ensure correct path
 const { auth } = require('./middleware/auth'); // Ensure correct path
 const Shop = require('./models/Shops'); // Ensure correct path
 const app = express();
+const Product = require('./models/Product');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -26,11 +28,17 @@ mongoose.connect(process.env.MONGO_URI)
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/shops', shopRoutes); // Use shop routes
-
+app.use('/api/products',MarketplaceRoutes);
 // Home route
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
+
+
+
+
+
+
 
 // Handle unknown routes
 app.all('*', (req, res) => {
@@ -42,6 +50,8 @@ app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
   res.status(500).json({ error: 'Internal Server Error' });
 });
+
+
 
 
 // app.get("/getparshops/:id", (req, res) => {

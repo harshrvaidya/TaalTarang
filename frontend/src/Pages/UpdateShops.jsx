@@ -14,9 +14,8 @@ useEffect(() => {
   axios.get(`http://localhost:3001/api/shops/getshop/${id}`)
   .then((response)=>{console.log(response.data)
     setShopName(response.data.shopname)
-    setShopLocation(response.data.shopAddress
-    )
-    setShopContact(response.data.shopContact)
+    setShopLocation(response.data.shopAddress)
+        setShopContact(response.data.shopContact)
     setShopImage(response.data.shopImage)
   })
   .catch((error)=>{console.log(error)})

@@ -1,27 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  loggedin:false,
-  myname:" ",
-  myprofilepic:""
-}
+  loggedin: false,
+  myname: "",
+  myprofilepic: "",
+  myUserid: "" // Add user ID to the state
+};
 
 export const loginSlice = createSlice({
   name: 'login',
   initialState,
   reducers: {
-    Usersetup: (state,action) => {
-        console.log(action.payload);
-        const { username, profilePic } = action.payload; // Use the same keys here
-        state.loggedin = true;
-        state.myname = username;
-        state.myprofilepic = profilePic;
+    Usersetup: (state, action) => {
+      console.log(action.payload);
+      const { username, profilePic, userId } = action.payload; // Include userId in the payload
+      state.loggedin = true;
+      state.myname = username;
+      state.myprofilepic = profilePic;
+      state.myUserid = userId; // Store user ID in the state
     },
-    
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { Usersetup} = loginSlice.actions
+export const { Usersetup } = loginSlice.actions;
 
-export default loginSlice.reducer
+export default loginSlice.reducer;
