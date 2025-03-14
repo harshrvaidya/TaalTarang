@@ -9,7 +9,6 @@ const { auth } = require('./middleware/auth'); // Ensure correct path
 const Shop = require('./models/Shops'); // Ensure correct path
 const app = express();
 const Product = require('./models/Product');
-const stripe=require('stripe')('sk_test_51R2cMf05qNWdGIZ7j6aqq0g5RSwHa1ksoCsCUgVybT7PXre65p95bUK5rDH0pXE2noonfJWfxwz0R4xgTnWKL3Yh00148rjB45');
 
 
 

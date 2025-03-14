@@ -1,5 +1,7 @@
 const Product = require('../models/Product');
-const stripe=require('stripe')('sk_test_51R2cMf05qNWdGIZ7j6aqq0g5RSwHa1ksoCsCUgVybT7PXre65p95bUK5rDH0pXE2noonfJWfxwz0R4xgTnWKL3Yh00148rjB45');
+require('dotenv').config();
+const stripekey=process.env.stripe_Key;
+const stripe = require('stripe')(process.env.stripe_Key);
 
 const addProduct = async (req, res) => {
   const { title, description, price, thumbnail, quantity } = req.body;
