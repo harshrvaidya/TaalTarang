@@ -16,13 +16,18 @@ import Welcome from './Pages/Admin/Welcome';
 import ShopDetail from './Pages/ShopDetail';
 import Success from './Pages/Marketplace/Success';
 import Layout from './Components/DashboardLayout';
+
+
+const googleapi=process.env.REACT_APP_GOOGLE_API_KEY;
+
 function App() {
   return (
     <LoadScript 
     libraries={["places"]}
-    googleMapsApiKey="AIzaSyCdwrEOVFTOFZtN7sqHXS5P6FtIoWvxxWw"
+    googleMapsApiKey={googleapi}
     loadingElement={<div>Loading...</div>}
   >
+    
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
