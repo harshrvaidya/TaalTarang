@@ -23,4 +23,9 @@ router.get('/getshop/:id', (req, res, next) => {
 router.put('/updateshops/:id',shopController.Updateshop);
 router.delete('/deleteshop/:id',shopController.Deleteshop);
 
+
+
+router.post('/like/:shopId', auth, shopController.likeShop);
+router.post('/unlike/:shopId', auth, shopController.unlikeShop);
+router.post('/comment/:shopId', auth, shopController.addComment);
 module.exports = router;

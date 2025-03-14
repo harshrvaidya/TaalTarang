@@ -20,10 +20,20 @@ const ShopSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  googleMapLoc: {
+    lat: { type: Number, required: true }, // Latitude
+    lng: { type: Number, required: true }  // Longitude
+  },
   addedBy: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User' // Links to the User who added the shop
-  }
+  },
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Array of user IDs who liked the shop
+  comments: [{
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    text: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now }
+  }]
 }, { timestamps: true }); // Adds createdAt and updatedAt automatically
 
 const Shop = mongoose.model('Shop', ShopSchema);

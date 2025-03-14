@@ -3,10 +3,23 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Remove, Increase, Decrease } from '../../Features/Shop/Shopslice';
 import { totalItem, totalPrice } from './cartUtils';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
+  const userEmail = useSelector((state) => state.login.myemail);
   const dispatch = useDispatch();
+  const buy = async () => {
+    let response = await axios.post('http://localhost:3001/api/products/pay', {
+      cartItems: cart,
+        email: userEmail, 
+    });
+
+    if(response.status === 200) {
+      window.location.href = response.data.url;
+      console.log(response.data);
+    }
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-orange-50 min-h-screen">
@@ -70,9 +83,9 @@ const Cart = () => {
         <Link to="/marketplace" className="px-5 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition-all duration-300">
           🛍️ Continue Shopping
         </Link>
-        <Link to="/checkout" className="px-5 py-2 bg-orange-600 text-white font-semibold rounded-lg shadow-md hover:bg-orange-700 transition-all duration-300">
+        <button onClick={buy}className="px-5 py-2 bg-orange-600 text-white font-semibold rounded-lg shadow-md hover:bg-orange-700 transition-all duration-300">
           ✅ Proceed to Checkout
-        </Link>
+        </button>
       </div>
     </div>
   );

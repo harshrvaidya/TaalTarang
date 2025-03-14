@@ -9,6 +9,10 @@ const { auth } = require('./middleware/auth'); // Ensure correct path
 const Shop = require('./models/Shops'); // Ensure correct path
 const app = express();
 const Product = require('./models/Product');
+const stripe=require('stripe')('sk_test_51R2cMf05qNWdGIZ7j6aqq0g5RSwHa1ksoCsCUgVybT7PXre65p95bUK5rDH0pXE2noonfJWfxwz0R4xgTnWKL3Yh00148rjB45');
+
+
+
 
 // Load environment variables from .env file
 dotenv.config();
@@ -54,17 +58,6 @@ app.use((err, req, res, next) => {
 
 
 
-// app.get("/getparshops/:id", (req, res) => {
-//   const myid = req.params.id;
-//   Shop.findById({_id: myid})
-//     .then((result) => {
-//       console.log(result);
-//       res.json(result);
-//     })
-//     .catch((err) => {
-//       res.json(err);
-//     });
-// });
 
 // Start the server
 const PORT = process.env.PORT || 3001;

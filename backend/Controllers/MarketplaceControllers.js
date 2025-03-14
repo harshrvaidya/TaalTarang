@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const stripe=require('stripe')('sk_test_51R2cMf05qNWdGIZ7j6aqq0g5RSwHa1ksoCsCUgVybT7PXre65p95bUK5rDH0pXE2noonfJWfxwz0R4xgTnWKL3Yh00148rjB45');
 
 const addProduct = async (req, res) => {
   const { title, description, price, thumbnail, quantity } = req.body;
@@ -85,4 +86,75 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-module.exports = { addProduct, getProducts, getProductById, updateProduct, deleteProduct };
+
+// const payment=async(req,res)=>{
+//   try {
+//     const product = await stripe.products.create({
+//         name: "Cart Items",
+//     });
+
+//     const price = await stripe.prices.create({
+//         product: product.id,
+//         unit_amount: 100 * 100, // 100 INR
+//         currency: 'inr',
+//     });
+
+//     const session = await stripe.checkout.sessions.create({
+//         line_items: [
+//             {
+//                 price: price.id,
+//                 quantity: 1,
+//             }
+//         ],
+//         mode: 'payment',
+//         success_url: 'http://localhost:3000/success',
+//         cancel_url: 'http://localhost:3000/cancel',
+//         customer_email: 'demo@gmail.com',
+//     });
+
+//     res.json({ url: session.url });
+// } catch (error) {
+//     console.error('Error creating payment session:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+// }
+
+// }
+const payment = async (req, res) => {
+  try {
+// Get cart items from request body
+const { cartItems, email } = req.body;
+    // Create a Stripe product for each cart item
+    const lineItems = await Promise.all(cartItems.map(async (item) => {
+      const product = await stripe.products.create({
+        name: item.title,
+      });
+
+      const price = await stripe.prices.create({
+        product: product.id,
+        unit_amount: item.price * 100, // Convert to smallest currency unit
+        currency: 'inr',
+      });
+
+      return {
+        price: price.id,
+        quantity: item.quantity,
+      };
+    }));
+
+    // Create a Stripe checkout session
+    const session = await stripe.checkout.sessions.create({
+      line_items: lineItems,
+      mode: 'payment',
+      success_url: 'http://localhost:3000/success',
+      cancel_url: 'http://localhost:3000/cancel',
+      customer_email: email,
+    });
+
+    res.json({ url: session.url });
+  } catch (error) {
+    console.error('Error creating payment session:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+module.exports = { addProduct, getProducts, getProductById, updateProduct, deleteProduct,payment };
