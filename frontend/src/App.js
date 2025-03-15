@@ -16,7 +16,7 @@ import Welcome from './Pages/Admin/Welcome';
 import ShopDetail from './Pages/ShopDetail';
 import Success from './Pages/Marketplace/Success';
 import Layout from './Components/DashboardLayout';
-
+import BeatClassifier from './Pages/BeatClassifier';
 
 const googleapi=process.env.REACT_APP_GOOGLE_API_KEY;
 
@@ -39,7 +39,7 @@ function App() {
         <Route path="/addshops" element={<AddShops/>} />
         <Route path="/UpdateShops/:id" element={<UpdateShops/>} />
         <Route path="/profile/:id" element={<Profile />} />
-
+        <Route path="/Beatclassify" element={<BeatClassifier />} />
 
 
 

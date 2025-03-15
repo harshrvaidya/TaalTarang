@@ -116,11 +116,11 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
               Marketplace
             </Link>
             <Link 
-              to="#" 
+              to="/Beatclassify" 
               className="block py-2 text-[#A52A2A] text-sm font-medium rounded-md transition duration-200 hover:bg-[#FFCC99] px-3"
               style={{ textDecoration: 'none' }}
             >
-              Gallery
+             ML Beat Classifier
             </Link>
 
             <Link 
