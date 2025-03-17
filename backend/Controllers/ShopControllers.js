@@ -24,7 +24,7 @@ const Shop = require('../models/Shops');
 // };
 
 const Addshops = async (req, res) => {
-  const { shopName, shopAddress, shopGoogleMap, shopContact, shopImage } = req.body; // Use shopGoogleMap
+  const { shopName, shopAddress, shopGoogleMap, shopContact, shopImage,description } = req.body; // Use shopGoogleMap
 
   console.log("📩 Received Data:", req.body);
   console.log("📍 googleMapLoc Object:", shopGoogleMap); // Correct key
@@ -48,6 +48,7 @@ const Addshops = async (req, res) => {
       },
       shopContact,
       shopImage,
+      description,
       addedBy: req.user._id
     });
 
@@ -88,22 +89,56 @@ const getShopById = async (req, res) => {
   }
 };
 
-const Updateshop = async (req, res) => {
-  const id=req.params.id;
+// const Updateshop = async (req, res) => {
+//   const id=req.params.id;
   
-  const { shopName, shopLocation, shopContact, shopImage } = req.body;
-  Shop.findOneAndUpdate({_id:id},{shopname:shopName,shopAddress:shopLocation,shopContact:shopContact,shopImage:shopImage})
-  .then((shop)=>{
-    res.json(shop)
-  })
-  .catch((error)=>{
-    console.log(error)
-  })
-  if (!shopName || !shopLocation || !shopContact || !shopImage) {
-    console.log('Missing fields:', { shopName, shopLocation, shopContact, shopImage });
+//   const { shopName, shopLocation, shopContact, shopImage } = req.body;
+//   Shop.findOneAndUpdate({_id:id},{shopname:shopName,shopAddress:shopLocation,shopContact:shopContact,shopImage:shopImage})
+//   .then((shop)=>{
+//     res.json(shop)
+//   })
+//   .catch((error)=>{
+//     console.log(error)
+//   })
+//   if (!shopName || !shopLocation || !shopContact || !shopImage) {
+//     console.log('Missing fields:', { shopName, shopLocation, shopContact, shopImage });
+//     return res.status(400).json({ error: 'All fields are required' });
+//   }
+  
+// };
+const Updateshop = async (req, res) => {
+  const id = req.params.id;
+  const { shopName, shopLocation, shopContact, shopImage, description, googleMapLoc } = req.body; // Include googleMapLoc
+
+  if (!shopName || !shopLocation || !shopContact || !shopImage || !description || !googleMapLoc) {
+    console.log('Missing fields:', { shopName, shopLocation, shopContact, shopImage, description, googleMapLoc });
     return res.status(400).json({ error: 'All fields are required' });
   }
-  
+
+  try {
+    const updatedShop = await Shop.findOneAndUpdate(
+      { _id: id },
+      {
+        shopname: shopName,
+        shopAddress: shopLocation,
+        shopContact: shopContact,
+        shopImage: shopImage,
+        description: description,
+        googleMapLoc: googleMapLoc // Update location
+      },
+      { new: true }
+    );
+
+    if (!updatedShop) {
+      return res.status(404).json({ error: 'Shop not found' });
+    }
+
+    console.log("✅ Shop updated successfully:", updatedShop);
+    res.json(updatedShop);
+  } catch (error) {
+    console.error('⚠️ Error updating shop:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 const Deleteshop = async (req, res) => {
   const  id  = req.params.id;

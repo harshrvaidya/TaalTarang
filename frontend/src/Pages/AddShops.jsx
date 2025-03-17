@@ -1,4 +1,5 @@
 
+
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
 // import { Link, useNavigate } from "react-router-dom";
@@ -26,11 +27,9 @@
 
 //   const user = useSelector((state) => state.login.myname);
 //   const myCloudName = process.env.REACT_APP_CLOUD_NAME;
-//   // const GoogleApi=process.env.REACT_APP_GOOGLE_API_KEY;
 
-  
 //   const navigate = useNavigate();
- 
+
 //   const handleImageChange = (e) => {
 //     const file = e.target.files[0];
 //     if (file) {
@@ -106,14 +105,19 @@
 //         lat: event.latLng.lat(),
 //         lng: event.latLng.lng(),
 //       };
-  
+
 //       console.log("📌 New Map Location Selected:", newLocation); // ✅ Debug log
 //       setShopGoogleMap(newLocation);
 //     } else {
 //       console.error("❌ Google Maps event missing latLng:", event);
 //     }
 //   };
-  
+
+//   useEffect(() => {
+//     if (window.google && window.google.maps) {
+//       setShopGoogleMap(defaultCenter);
+//     }
+//   }, []);
 
 //   return (
 //     <div className="flex flex-col items-center justify-center min-h-screen bg-[#FFE4C4]">
@@ -155,8 +159,6 @@
 //           <label className="block text-gray-700 text-sm font-bold mb-2">
 //             Select Location on Map
 //           </label>
-// <LoadScript googleMapsApiKey="AIzaSyCdwrEOVFTOFZtN7sqHXS5P6FtIoWvxxWw">
-
 //             <GoogleMap
 //               mapContainerStyle={mapContainerStyle}
 //               center={shopGoogleMap}
@@ -165,7 +167,7 @@
 //             >
 //               <Marker position={shopGoogleMap} />
 //             </GoogleMap>
-//           </LoadScript>
+        
 //         </div>
 
 //         <div className="mb-4">
@@ -255,6 +257,7 @@ const AddShops = () => {
   const [shopImage, setShopImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [shopGoogleMap, setShopGoogleMap] = useState(defaultCenter); // Stores lat & lng
+  const [description, setDescription] = useState(""); // New state for description
 
   const user = useSelector((state) => state.login.myname);
   const myCloudName = process.env.REACT_APP_CLOUD_NAME;
@@ -293,7 +296,7 @@ const AddShops = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!shopName || !shopAddress || !shopContact || !shopImage) {
+    if (!shopName || !shopAddress || !shopContact || !shopImage || !description) {
       alert("All fields are required!");
       return;
     }
@@ -307,6 +310,7 @@ const AddShops = () => {
         shopGoogleMap, // Stores { lat, lng }
         shopContact,
         shopImage: uploadedImageUrl,
+        description, // Include description in form data
       };
       console.log("🚀 Sending Data to Backend:", formdata);
 
@@ -388,6 +392,18 @@ const AddShops = () => {
 
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
+            Description
+          </label>
+          <textarea
+            placeholder="Enter shop description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="block w-full p-3 mb-4 border border-gray-300 rounded focus:ring-2 focus:ring-orange-500"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
             Select Location on Map
           </label>
             <GoogleMap
@@ -463,6 +479,7 @@ const AddShops = () => {
 };
 
 export default AddShops;
+
 
 
 

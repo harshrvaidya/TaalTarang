@@ -24,6 +24,11 @@ const ShopSchema = new mongoose.Schema({
     lat: { type: Number, required: true }, // Latitude
     lng: { type: Number, required: true }  // Longitude
   },
+  description: {
+    type: String,
+    required: true,
+    trim: true
+  },
   addedBy: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User' // Links to the User who added the shop
