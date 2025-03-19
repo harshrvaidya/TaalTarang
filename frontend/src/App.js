@@ -20,7 +20,8 @@ import BeatClassifier from './Pages/BeatClassifier';
 import AdminLayout from './Layout/AdminLayout';
 import OrderManagement from './Pages/Admin/OrderMangement';
 import UserManagement from './Pages/Admin/UserMangement';
-import ProductManagement from './Pages/Admin/ProductMangement';
+import ProductManagement from './Pages/Admin/ProductMangement/ProductMangement';
+import AddProductAdmin from './Pages/Admin/ProductMangement/AddProductAdmin';
 import EditUser from './Pages/Admin/EditUser';
 const googleapi=process.env.REACT_APP_GOOGLE_API_KEY;
 
@@ -59,6 +60,7 @@ function App() {
           <Route path="users" element={<UserManagement />} />
           <Route path="products" element={<ProductManagement />} />
           <Route path="Edituser/:id" element={< EditUser />} />
+          <Route path="products/add" element={< AddProductAdmin />} />
         </Route>
         {/* Add more routes here as needed */}
       </Routes>

@@ -27,6 +27,11 @@ const AdminSidebar = () => {
               Product Management
             </Link>
           </li>
+          <li className="mb-4">
+            <Link to="/login" className="hover:underline">
+              Login page
+            </Link>
+          </li>
         </ul>
       </div>
     </aside>
