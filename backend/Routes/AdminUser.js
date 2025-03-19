@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User'); 
 const adminAuth = require('../middleware/adminAuth');
-const { getUsers } = require('../Controllers/AdminUserMangement');
+const { getUsers, deleteUser} = require('../Controllers/AdminUserMangement');
 router.get('/',getUsers);
  
 
@@ -36,4 +36,5 @@ router.put('/:id',async (req, res) => {
       res.status(500).json({ error: 'Failed to update user' });
     }
   });
+  router.delete('/:id',deleteUser);
 module.exports = router;

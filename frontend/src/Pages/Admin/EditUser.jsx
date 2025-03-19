@@ -12,7 +12,7 @@ const EditUser = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
-
+  const myCloudName = process.env.REACT_APP_CLOUD_NAME;
 
 useEffect(() => {
     axios.get(`http://localhost:3001/api/admin/users/${id}`)
@@ -30,6 +30,8 @@ useEffect(() => {
     });
 },[id]);
 
+
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -38,14 +40,34 @@ useEffect(() => {
       reader.readAsDataURL(file);
     }
   };
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    const uniquePublicId = `${name}-${Date.now()}`;
+
+    formData.append("file", file);
+    formData.append("upload_preset", "user_profile_preset");
+    formData.append("public_id", uniquePublicId);
+
+    try {
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/${myCloudName}/image/upload`,
+        formData
+      );
+      return res.data.secure_url;
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+      throw new Error("Image upload failed.");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const uploadedImageUrl = await uploadToCloudinary(profilePic);
     try {
       const token = localStorage.getItem('authToken');
       await axios.put(
         `http://localhost:3001/api/admin/users/${id}`,
-        { name, phone_no: phoneNumber, profilepic: profilePic },
+        { name, phone_no: phoneNumber, profilepic: uploadedImageUrl  },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSuccess('User updated successfully!');
