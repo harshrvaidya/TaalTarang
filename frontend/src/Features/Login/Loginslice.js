@@ -4,7 +4,8 @@ const initialState = {
   loggedin: false,
   myname: "",
   myprofilepic: "",
-  myUserid: "" // Add user ID to the state
+  myUserid: "",
+  myRole: "", // Add user ID to the state
 };
 
 export const loginSlice = createSlice({
@@ -13,11 +14,12 @@ export const loginSlice = createSlice({
   reducers: {
     Usersetup: (state, action) => {
       console.log(action.payload);
-      const { username, profilePic, userId } = action.payload; // Include userId in the payload
+      const { username, profilePic, userId, role } = action.payload; // Include userId in the payload
       state.loggedin = true;
       state.myname = username;
       state.myprofilepic = profilePic;
       state.myUserid = userId; // Store user ID in the state
+      state.myRole = role; 
     },
   },
 });

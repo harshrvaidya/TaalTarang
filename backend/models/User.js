@@ -15,7 +15,8 @@ UserSchema.methods.generateToken = async function () {
   try {
     return jwt.sign({
       userId: this._id.toString(),
-      email: this.email
+      email: this.email,
+      role: this.role,
     }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
   } catch (error) {
     console.error('Error generating token:', error);

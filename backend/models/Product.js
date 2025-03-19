@@ -21,6 +21,11 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  category: {
+    type: String,
+    enum: ['Protective Gears', 'Maintenance', 'Learning', 'Others'], // Predefined categories
+    required: false,
+  },
   addedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

@@ -17,9 +17,9 @@ const Login = () => {
     e.preventDefault();
      
 
-    if (email === "admin@gmail.com" && password === "123") {
-      navigate("/admin"); // Redirect to Admin Panel
-    } 
+    // if (email === "admin@gmail.com" && password === "123") {
+    //   navigate("/admin"); // Redirect to Admin Panel
+    // } 
     if (!email || !password) {
       toast.error('Please fill in all fields');
       return;
@@ -47,15 +47,21 @@ const Login = () => {
           profilePic: response.data.profilePic,
           token: response.data.token,
           userId: response.data.myUserid,
+          role: response.data.role,
         };
 
         dispatch(Usersetup(loggedinuser));
         localStorage.setItem('authToken', response.data.token);
         localStorage.setItem('userId', response.data.myUserid);
 
-        setTimeout(() => {
-          navigate('/dashboard');
-        }, 2000);
+        if (response.data.role === "admin") {
+          navigate('/admin'); // Redirect to admin page
+        } else {
+          setTimeout(() => {
+            navigate('/dashboard');
+          }, 2000); // Redirect to user dashboard
+        }
+        
       }
     } catch (error) {
       console.error('Login error:', error);

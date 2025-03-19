@@ -64,6 +64,7 @@ const login = async (req, res) => {
         message: "Login successful",
         token,
         myUserid: userExist._id.toString(),
+        role: userExist.role,
         username: userExist.name, // Send the username and profile pic needed for the landing page
         profilePic: userExist.profilepic
       });

@@ -9,6 +9,7 @@ const { auth } = require('./middleware/auth'); // Ensure correct path
 const Shop = require('./models/Shops'); // Ensure correct path
 const app = express();
 const Product = require('./models/Product');
+const adminUser = require('./Routes/AdminUser');
 
 
 
@@ -32,6 +33,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.use('/api/users', userRoutes);
 app.use('/api/shops', shopRoutes); // Use shop routes
 app.use('/api/products',MarketplaceRoutes);
+app.use('/api/admin/users',adminUser);
 // Home route
 app.get('/', (req, res) => {
   res.send('Hello, World!');
