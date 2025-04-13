@@ -21,10 +21,16 @@ export const loginSlice = createSlice({
       state.myUserid = userId; // Store user ID in the state
       state.myRole = role; 
     },
+    logout: (state) => {
+      state.loggedin = false;
+      state.myname = "";
+      state.myprofilepic = "";
+      state.myUserid = "";
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { Usersetup } = loginSlice.actions;
+export const { Usersetup, logout  } = loginSlice.actions;
 
 export default loginSlice.reducer;

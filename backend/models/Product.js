@@ -31,6 +31,7 @@ const productSchema = new mongoose.Schema({
     ref: 'User',
     required: false,
   },
+ 
 }, {
   timestamps: false,
 });

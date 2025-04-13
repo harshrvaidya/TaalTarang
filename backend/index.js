@@ -11,8 +11,8 @@ const app = express();
 const Product = require('./models/Product');
 const adminUser = require('./Routes/AdminUser');
 const adminProductRoutes = require('./Routes/AdminProducts');
-
-
+const adminshopRoutes=require("./Routes/AdminShopRoutes")
+const OrderRoutes=require('./Routes/OrderRoutes');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -33,8 +33,13 @@ mongoose.connect(process.env.MONGO_URI)
 app.use('/api/users', userRoutes);
 app.use('/api/shops', shopRoutes); // Use shop routes
 app.use('/api/products',MarketplaceRoutes);
+app.use('/api/orders',OrderRoutes);
+app.use('/api/admin/orders',OrderRoutes);
 app.use('/api/admin/users',adminUser);
 app.use('/api/admin/products',adminProductRoutes);
+app.use('/api/admin/shops',adminshopRoutes);
+
+
 // Home route
 app.get('/', (req, res) => {
   res.send('Hello, World!');

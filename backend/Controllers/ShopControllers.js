@@ -1,27 +1,6 @@
 const Shop = require('../models/Shops');
 
-// const Addshops = async (req, res) => {
-//   const { shopName, shopLocation, shopContact, shopImage } = req.body;
-//   if (!shopName || !shopLocation || !shopContact || !shopImage) {
-//     console.log('Missing fields:', { shopName, shopLocation, shopContact, shopImage });
-//     return res.status(400).json({ error: 'All fields are required' });
-//   }
-//   try {
-//     const newShop = new Shop({
-//       shopname: shopName,
-//       shopAddress: shopLocation,
-//       shopContact: shopContact,
-//       shopImage: shopImage,
-//       addedBy: req.user._id // Save the ID of the logged-in user
-//     });
-//     const savedShop = await newShop.save();
-//     console.log('Shop added successfully:', savedShop);
-//     res.status(201).json(savedShop);
-//   } catch (error) {
-//     console.error('Error during adding shop:', error);
-//     res.status(500).json({ error: 'Failed to add shop' });
-//   }
-// };
+
 
 const Addshops = async (req, res) => {
   const { shopName, shopAddress, shopGoogleMap, shopContact, shopImage,description } = req.body; // Use shopGoogleMap
@@ -49,7 +28,8 @@ const Addshops = async (req, res) => {
       shopContact,
       shopImage,
       description,
-      addedBy: req.user._id
+      addedBy: req.user._id,
+      verified: false,
     });
 
     await newShop.save();
@@ -89,26 +69,10 @@ const getShopById = async (req, res) => {
   }
 };
 
-// const Updateshop = async (req, res) => {
-//   const id=req.params.id;
-  
-//   const { shopName, shopLocation, shopContact, shopImage } = req.body;
-//   Shop.findOneAndUpdate({_id:id},{shopname:shopName,shopAddress:shopLocation,shopContact:shopContact,shopImage:shopImage})
-//   .then((shop)=>{
-//     res.json(shop)
-//   })
-//   .catch((error)=>{
-//     console.log(error)
-//   })
-//   if (!shopName || !shopLocation || !shopContact || !shopImage) {
-//     console.log('Missing fields:', { shopName, shopLocation, shopContact, shopImage });
-//     return res.status(400).json({ error: 'All fields are required' });
-//   }
-  
-// };
+
 const Updateshop = async (req, res) => {
   const id = req.params.id;
-  const { shopName, shopLocation, shopContact, shopImage, description, googleMapLoc } = req.body; // Include googleMapLoc
+  const { shopName, shopLocation, shopContact, shopImage, description, googleMapLoc, } = req.body; // Include googleMapLoc
 
   if (!shopName || !shopLocation || !shopContact || !shopImage || !description || !googleMapLoc) {
     console.log('Missing fields:', { shopName, shopLocation, shopContact, shopImage, description, googleMapLoc });
@@ -124,7 +88,8 @@ const Updateshop = async (req, res) => {
         shopContact: shopContact,
         shopImage: shopImage,
         description: description,
-        googleMapLoc: googleMapLoc // Update location
+        googleMapLoc: googleMapLoc,
+        verified: false, // Reset verified status to false // Update location
       },
       { new: true }
     );
@@ -226,6 +191,70 @@ const addComment = async (req, res) => {
   }
 };
 
+//add to fav
+const addToFavorites = async (req, res) => {
+  const { id } = req.params; // Shop ID
+  const userId = req.user._id; // User ID from the authenticated request
+
+  try {
+    const shop = await Shop.findById(id);
+    if (!shop) {
+      return res.status(404).json({ error: 'Shop not found' });
+    }
+
+    // Check if the shop is already in the user's favorites
+    if (shop.favorites.includes(userId)) {
+      return res.status(400).json({ error: 'Shop is already in your favorites' });
+    }
+
+    // Add the user to the favorites list
+    shop.favorites.push(userId);
+    await shop.save();
+
+    res.status(200).json({ message: 'Shop added to favorites', shop });
+  } catch (error) {
+    console.error('Error adding to favorites:', error);
+    res.status(500).json({ error: 'Failed to add shop to favorites' });
+  }
+};
+
+const getFavoriteShops = async (req, res) => {
+  const userId = req.user._id; // User ID from the authenticated request
+
+  try {
+    const favoriteShops = await Shop.find({ favorites: userId });
+    res.status(200).json(favoriteShops);
+  } catch (error) {
+    console.error('Error fetching favorite shops:', error);
+    res.status(500).json({ error: 'Failed to fetch favorite shops' });
+  }
+};
+
+const removeFromFavorites = async (req, res) => {
+  const { id } = req.params; // Shop ID
+  const userId = req.user._id; // User ID from the authenticated request
+
+  try {
+    const shop = await Shop.findById(id);
+    if (!shop) {
+      return res.status(404).json({ error: 'Shop not found' });
+    }
+
+    // Check if the shop is in the user's favorites
+    if (!shop.favorites.includes(userId)) {
+      return res.status(400).json({ error: 'Shop is not in your favorites' });
+    }
+
+    // Remove the user from the favorites list
+    shop.favorites = shop.favorites.filter((favUserId) => favUserId.toString() !== userId.toString());
+    await shop.save();
+
+    res.status(200).json({ message: 'Shop removed from favorites', shop });
+  } catch (error) {
+    console.error('Error removing from favorites:', error);
+    res.status(500).json({ error: 'Failed to remove shop from favorites' });
+  }
+};
 
 
 
@@ -233,5 +262,4 @@ const addComment = async (req, res) => {
 
 
 
-
-module.exports = { Getshops, Addshops, getShopById ,Updateshop,Deleteshop,likeShop,unlikeShop,addComment};
+module.exports = { Getshops, Addshops, getShopById ,Updateshop,Deleteshop,likeShop,unlikeShop,addComment,addToFavorites,getFavoriteShops,removeFromFavorites};

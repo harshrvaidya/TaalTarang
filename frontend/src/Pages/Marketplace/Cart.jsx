@@ -81,10 +81,10 @@ const Cart = () => {
       {/* Checkout & Continue Shopping */}
       <div className="mt-8 flex justify-between">
         <Link to="/marketplace" className="px-5 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition-all duration-300">
-          🛍️ Continue Shopping
+           Continue Shopping
         </Link>
         <button onClick={buy}className="px-5 py-2 bg-orange-600 text-white font-semibold rounded-lg shadow-md hover:bg-orange-700 transition-all duration-300">
-          ✅ Proceed to Checkout
+           Proceed to Checkout
         </button>
       </div>
     </div>

@@ -29,10 +29,15 @@ const ShopSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  verified: {
+    type: Boolean,
+    default: false, // By default, the shop is not verified
+  },
   addedBy: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User' // Links to the User who added the shop
   },
+  favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Array of user IDs who favorited the shop
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Array of user IDs who liked the shop
   comments: [{
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

@@ -32,6 +32,11 @@ const AdminSidebar = () => {
               Login page
             </Link>
           </li>
+          <li className="mb-4">
+            <Link to="/admin/ShopManagement" className="hover:underline">
+           Shop management
+            </Link>
+          </li>
         </ul>
       </div>
     </aside>

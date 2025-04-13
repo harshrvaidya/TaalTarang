@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import { toast, ToastContainer } from "react-toastify"; // For toast notifications
+import "react-toastify/dist/ReactToastify.css"; // Toastify styles
 const Profile = () => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -64,6 +65,21 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Validation: Check if all fields are filled
+    if (!name.trim() || !phoneNumber.trim() || !profilePic) {
+      toast.error("All fields are required. Please fill out all fields.", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
+  
     try {
       const uploadedImageUrl = await uploadToCloudinary(profilePic);
       const response = await axios.put(
@@ -80,12 +96,30 @@ const Profile = () => {
         }
       );
       console.log("response from backend", response.data);
-      setSuccess("Profile updated successfully!");
-      setError("");
+  
+      // Show success toast
+      toast.success("Profile updated successfully!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (error) {
       console.error("Error updating profile:", error);
-      setError("Failed to update profile. Please try again later.");
-      setSuccess("");
+  
+      // Show error toast
+      toast.error("Failed to update profile. Please try again later.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
@@ -95,7 +129,8 @@ const Profile = () => {
         <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
           Profile Management
         </h1>
-
+   {/* Toast Container */}
+   <ToastContainer />
         {error && <p className="text-red-600 text-center mb-4">{error}</p>}
         {success && <p className="text-green-600 text-center mb-4">{success}</p>}
 
