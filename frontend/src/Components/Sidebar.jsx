@@ -63,13 +63,13 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
             >
              Favourite
             </Link>
-            {/* <Link
+            <Link
               to="/order-history"
               className="block py-2 text-[#A52A2A] text-sm font-medium rounded-md transition duration-200 hover:bg-[#FFCC99] px-3"
               style={{ textDecoration: 'none' }}
             >
               Payment History
-            </Link> */}
+            </Link>
           </nav>
 
           {/* Profile Section */}

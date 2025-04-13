@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-const OrderHistory = () => {
+const PaymentHistory = () => {
   const [orders, setOrders] = useState([]);
-  const userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
-
+  const userId = localStorage.getItem("userId"); // Retrieve userId from localStorage
   useEffect(() => {
     const fetchOrderHistory = async () => {
       try {
         const response = await axios.get(`http://localhost:3001/api/orders/history/${userId}`);
+        console.log("Order history response:", response.data);
         setOrders(response.data);
       } catch (error) {
-        console.error('Error fetching order history:', error);
-        alert('Failed to fetch order history');
+        console.error("Error fetching order history:", error);
+        alert("Failed to fetch order history");
       }
     };
-
+  
     fetchOrderHistory();
   }, [userId]);
 
@@ -30,20 +30,11 @@ const OrderHistory = () => {
             <div key={order._id} className="bg-white rounded-lg shadow-md p-4">
               <h3 className="text-lg font-semibold text-gray-800">Order ID: {order._id}</h3>
               <p className="text-gray-600">Total Amount: ₹{order.totalAmount}</p>
-              <p className="text-gray-600">Payment Status: {order.paymentStatus}</p>
+              <p className="text-gray-600">Order Date: {new Date(order.createdAt).toLocaleString()}</p>
               <ul className="mt-4 space-y-2">
-                {order.items.map((item) => (
-                  <li key={item.product._id} className="flex items-center space-x-4">
-                    <img
-                      src={item.product.thumbnail}
-                      alt={item.product.title}
-                      className="w-16 h-16 object-cover rounded-lg"
-                    />
-                    <div>
-                      <h4 className="text-gray-800 font-semibold">{item.product.title}</h4>
-                      <p className="text-gray-600">Quantity: {item.quantity}</p>
-                      <p className="text-gray-600">Price: ₹{item.product.price}</p>
-                    </div>
+                {order.items.map((item, index) => (
+                  <li key={index} className="text-gray-800">
+                    {item.title} - Quantity: {item.quantity}, Price: ₹{item.price}
                   </li>
                 ))}
               </ul>
@@ -55,4 +46,4 @@ const OrderHistory = () => {
   );
 };
 
-export default OrderHistory;
+export default PaymentHistory;

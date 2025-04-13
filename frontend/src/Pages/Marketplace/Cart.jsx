@@ -10,6 +10,9 @@ const Cart = () => {
   const userEmail = useSelector((state) => state.login.myemail);
   const dispatch = useDispatch();
   const buy = async () => {
+    localStorage.setItem("cartItems", JSON.stringify(cart));
+    localStorage.setItem("totalPrice", totalPrice(cart));
+
     let response = await axios.post('http://localhost:3001/api/products/pay', {
       cartItems: cart,
         email: userEmail, 
