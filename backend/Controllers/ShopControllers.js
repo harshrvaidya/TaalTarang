@@ -206,7 +206,6 @@ const addToFavorites = async (req, res) => {
     if (shop.favorites.includes(userId)) {
       return res.status(400).json({ error: 'Shop is already in your favorites' });
     }
-
     // Add the user to the favorites list
     shop.favorites.push(userId);
     await shop.save();
@@ -257,9 +256,46 @@ const removeFromFavorites = async (req, res) => {
 };
 
 
+const rateShop = async (req, res) => {
+  const { shopId } = req.params;
+  const { rating } = req.body;
+  const userId = req.user._id;
+
+  if (!rating || rating < 1 || rating > 5) {
+    return res.status(400).json({ error: 'Rating must be between 1 and 5' });
+  }
+
+  try {
+    const shop = await Shop.findById(shopId);
+    if (!shop) {
+      return res.status(404).json({ error: 'Shop not found' });
+    }
+
+    // Check if the user has already rated the shop
+    const existingRating = shop.ratings.find((r) => r.user.toString() === userId.toString());
+    if (existingRating) {
+      // Update the existing rating
+      existingRating.rating = rating;
+    } else {
+      // Add a new rating
+      shop.ratings.push({ user: userId, rating });
+    }
+
+    // Calculate the average rating
+    const totalRatings = shop.ratings.reduce((sum, r) => sum + r.rating, 0);
+    shop.averageRating = totalRatings / shop.ratings.length;
+
+    await shop.save();
+
+    res.status(200).json({ message: 'Rating submitted successfully', shop });
+  } catch (error) {
+    console.error('Error rating shop:', error);
+    res.status(500).json({ error: 'Failed to rate shop' });
+  }
+};
 
 
 
 
 
-module.exports = { Getshops, Addshops, getShopById ,Updateshop,Deleteshop,likeShop,unlikeShop,addComment,addToFavorites,getFavoriteShops,removeFromFavorites};
+module.exports = { Getshops, Addshops, getShopById ,Updateshop,Deleteshop,likeShop,unlikeShop,addComment,addToFavorites,getFavoriteShops,removeFromFavorites,rateShop};

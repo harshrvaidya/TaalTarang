@@ -31,6 +31,8 @@ import Editshop from './Pages/Admin/ShopMangement/Editshop';
 import PaymentHistory from './Pages/Marketplace/PaymentHistory';
 import OrderHistory from './Pages/Marketplace/PaymentHistory';
 import AddToFav from './Pages/AddtoFav';
+import AdminAddShop from './Pages/Admin/ShopMangement/AdminAddShop';
+import Cancel from './Pages/Marketplace/Cancel';
 const googleapi = process.env.REACT_APP_GOOGLE_API_KEY;
 
 function App() {
@@ -55,6 +57,7 @@ function App() {
               <Route path="/Beatclassify" element={<BeatClassifier />} />
               <Route path="/marketplace" element={<Marketplace />} />
               <Route path="/success" element={<Success />} />
+              <Route path="/cancel" element={<Cancel />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/payment-history" element={<PaymentHistory />} />
               <Route path="/order-history" element={<OrderHistory />} />
@@ -70,6 +73,7 @@ function App() {
                 <Route path="Edituser/:id" element={<EditUser />} />
                 <Route path="ShopManagement" element={<MainShopmangement />} />
                 <Route path="shops/edit/:id" element={<Editshop />} />
+                <Route path="shops/add" element={<AdminAddShop/>} /> {/* Add Shop Route */}
               </Route>
             </Routes>
           </Router>

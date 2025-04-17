@@ -38,6 +38,13 @@ const ShopSchema = new mongoose.Schema({
     ref: 'User' // Links to the User who added the shop
   },
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Array of user IDs who favorited the shop
+  ratings: [
+    {
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // User who rated
+      rating: { type: Number, required: true, min: 1, max: 5 }, // Rating value (1-5)
+    },
+  ],
+  averageRating: { type: Number, default: 0 }, // Average rating
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Array of user IDs who liked the shop
   comments: [{
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 const MainShopmangement = () => {
   const [shops, setShops] = useState([]);
   const [error, setError] = useState('');
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchShops = async () => {
       try {
@@ -43,7 +43,12 @@ const MainShopmangement = () => {
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">Shop Management</h1>
       {error && <p className="text-red-600">{error}</p>}
-
+      <button
+          onClick={() => navigate('/admin/shops/add')}
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Add Shop
+        </button>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
           <thead className="bg-gray-800 text-white">

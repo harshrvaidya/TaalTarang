@@ -36,6 +36,16 @@ const AdminSidebar = () => {
             <Link to="/admin/ShopManagement" className="hover:underline">
            Shop management
             </Link>
+
+            
+          </li>
+
+          <li className="mb-4">
+            <Link to="/dashboard" className="hover:underline">
+           User Side Dashboard
+            </Link>
+
+            
           </li>
         </ul>
       </div>

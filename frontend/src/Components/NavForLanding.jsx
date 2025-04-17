@@ -29,4 +29,4 @@ const NavForLanding = () => {
   );
 };
 
-export default NavForLanding;
+export default NavForLanding;  

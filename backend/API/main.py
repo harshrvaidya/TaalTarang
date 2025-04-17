@@ -15,11 +15,11 @@ CORS(app)  # Enable CORS
 MODEL_PATH = "tabla_classifier2.pkl"  # Ensure the correct path
 
 try:
-    with open(MODEL_PATH, "rb") as model_file:
+    with open(MODEL_PATH, "rb") as model_file: #we try to open the trained model
         model = pickle.load(model_file)
-    print("✅ Model loaded successfully!")
+    print("Model loaded successfully!") 
 except Exception as e:
-    print(f"❌ Error loading model: {e}")
+    print(f" Error loading model: {e}")
     model = None  # Set to None if loading fails
 
 # Function to extract MFCC features from an audio file
@@ -51,24 +51,24 @@ def predict():
         if model is None:
             return jsonify({"error": "Model not loaded."}), 500
 
-        print("ℹ️ Extracting features from the uploaded file...")
+        print("Extracting features from the uploaded file...")
         features = extract_features(file_path)
 
         if features is None:
             return jsonify({"error": "Feature extraction failed"}), 500
 
-        print(f"ℹ️ Extracted Features Shape: {features.shape}")
+        print(f"Extracted Features Shape: {features.shape}")
         
         # Ensure model expects the correct input shape
         prediction = model.predict(features)[0]  # Make prediction
-        print(f"✅ Prediction: {prediction}")
+        print(f"Prediction: {prediction}")
 
         os.remove(file_path)  # Clean up temp file
         return jsonify({"prediction": prediction})
 
     except Exception as e:
         os.remove(file_path)  # Clean up temp file in case of error
-        print("❌ ERROR:", str(e))
+        print("ERROR:", str(e))
         traceback.print_exc()  # Print full error trace in terminal
         return jsonify({"error": f"Server error: {str(e)}"}), 500
 

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const shopController = require('../Controllers/ShopControllers');
 const auth = require('../middleware/auth');
-const { addToFavorites, getFavoriteShops,removeFromFavorites } = require('../Controllers/ShopControllers');
+const { addToFavorites, getFavoriteShops,removeFromFavorites,rateShop } = require('../Controllers/ShopControllers');
 // Route to add a new shop
 router.post('/addshop',auth, (req, res, next) => {
   console.log('Received request to add a new shop');
@@ -35,5 +35,5 @@ router.post('/comment/:shopId', auth, shopController.addComment);
 router.post('/favorite/:id', auth, addToFavorites); // Add shop to favorites
 router.get('/favorites', auth, getFavoriteShops);
 router.delete('/favorite/:id', auth, removeFromFavorites)
-
+router.post('/rate/:shopId', auth, rateShop); // Route to rate a shop
 module.exports = router;
